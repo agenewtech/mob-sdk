@@ -42,10 +42,10 @@ func (r *CustomMsgRequest) MarshalURL(c *comm.Client, buf *bytes.Buffer) error {
 }
 
 type CustomMsgResponse struct {
-	Status int
+	Status int `json:"status"`
 	Res    struct {
-		SMSID string
-	}
+		SMSID string `json:"smsId"`
+	} `json:"res,omitempty"`
 }
 
 type SMSVerifyRequest struct {
@@ -68,5 +68,5 @@ func (r *SMSVerifyRequest) MarshalURL(c *comm.Client, buf *bytes.Buffer) error {
 }
 
 type SMSVerifyResponse struct {
-	Status int
+	Status int `json:"status"`
 }

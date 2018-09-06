@@ -7,9 +7,10 @@ import (
 )
 
 const (
-	SMSEndPoint  = "https://webapi.sms.mob.com"
-	SMSVerifyURL = SMSEndPoint + "/sms/verify"
-	CustomMsgURL = SMSEndPoint + "/custom/msg"
+	SMSEndPoint   = "https://webapi.sms.mob.com"
+	SMSVerifyURL  = SMSEndPoint + "/sms/verify"
+	SMSSendMsgURL = SMSEndPoint + "/sms/sendmsg"
+	CustomMsgURL  = SMSEndPoint + "/custom/msg"
 )
 
 type CustomMsgRequest struct {
@@ -55,7 +56,7 @@ type SMSVerifyRequest struct {
 }
 
 func (r *SMSVerifyRequest) MarshalURL(c *comm.Client, buf *bytes.Buffer) error {
-	buf.WriteString(CustomMsgURL)
+	buf.WriteString(SMSVerifyURL)
 	buf.WriteString("?appKey=")
 	buf.WriteString(c.AppKey)
 	buf.WriteString("&zone=")
@@ -68,5 +69,30 @@ func (r *SMSVerifyRequest) MarshalURL(c *comm.Client, buf *bytes.Buffer) error {
 }
 
 type SMSVerifyResponse struct {
+	Status int `json:"status"`
+}
+
+type SMSSendMsgRequest struct {
+	Phone        string
+	Zone         string
+	TemplateCode string
+}
+
+func (r *SMSSendMsgRequest) MarshalURL(c *comm.Client, buf *bytes.Buffer) error {
+	buf.WriteString(SMSSendMsgURL)
+	buf.WriteString("?appKey=")
+	buf.WriteString(c.AppKey)
+	buf.WriteString("&zone=")
+	buf.WriteString(r.Zone)
+	buf.WriteString("&phone=")
+	buf.WriteString(r.Phone)
+	if r.TemplateCode != "" {
+		buf.WriteString("&templateCode=")
+		buf.WriteString(r.TemplateCode)
+	}
+	return nil
+}
+
+type SMSSendMsgResponse struct {
 	Status int `json:"status"`
 }

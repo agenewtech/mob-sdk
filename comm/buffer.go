@@ -12,9 +12,13 @@ var bufferPool = &sync.Pool{
 }
 
 func PutBuffer(buf *bytes.Buffer) {
-	bufferPool.Put(buf)
+	if buf != nil {
+		bufferPool.Put(buf)
+	}
 }
 
 func GetBuffer() *bytes.Buffer {
-	return bufferPool.Get().(*bytes.Buffer)
+	b := bufferPool.Get().(*bytes.Buffer)
+	b.Reset()
+	return b
 }
